@@ -1,6 +1,8 @@
 #!/usr/bin/python
 
 import Tkinter as Tkt
+import schemas.Book as Book
+from schemas.SQLiteManager import DB
 
 
 class libraryAppTk(Tkt.Tk):
@@ -8,6 +10,9 @@ class libraryAppTk(Tkt.Tk):
         Tkt.Tk.__init__(self, parent)
         self.parent = parent
         self.initialize()
+
+        dbManager = DB('library.db')
+        print dbManager.tableExists('book')
 
     def initialize(self):
         self['bg'] = 'white'
@@ -32,7 +37,7 @@ class libraryAppTk(Tkt.Tk):
         button.grid(column=0, row=0)
 
         self.label = Tkt.Text(self.secondFrame, width=30, height=4,
-                             fg="white", bg="blue", yscrollcommand=self.definitionScroll.set)
+                              fg="white", bg="blue", yscrollcommand=self.definitionScroll.set)
         self.label.grid(column=0, row=1, sticky='EW')
         self.setText(u"Hello !")
 
@@ -46,8 +51,8 @@ class libraryAppTk(Tkt.Tk):
         self.FocusInEntry()
 
     def setText(self, text):
-        self.label.delete("1.0", Tkt.END)   # an example of how to delete all current text
-        self.label.insert("1.0", text) # an example o
+        self.label.delete("1.0", Tkt.END)  # an example of how to delete all current text
+        self.label.insert("1.0", text)  # an example o
 
     def FocusInEntry(self):
         self.entry.focus_set()
@@ -55,6 +60,7 @@ class libraryAppTk(Tkt.Tk):
 
     def OnButtonClick(self):
         self.setText(self.entryVariable.get() + " (You clicked the button)")
+        booked = Book.Book(self.entryVariable.get())
         self.FocusInEntry()
 
     def OnPressEnter(self, event):
